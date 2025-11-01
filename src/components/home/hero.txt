@@ -1,0 +1,264 @@
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import AnimatedTitle from "../ui/AnimatedTitle";
+
+const Hero = () => {
+  const containerRef = useRef(null);
+  const subtextRef = useRef(null);
+  const buttonRef = useRef(null);
+  const scrollIndicatorRef = useRef(null);
+  const buttonArrowRef = useRef(null);
+  const buttonHoverRef = useRef(null);
+  const taglineRef = useRef(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline();
+
+    // Container animation
+    tl.fromTo(
+      containerRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.8, ease: "power2.out" }
+    );
+
+    // Tagline animation
+    tl.fromTo(
+      taglineRef.current,
+      {
+        opacity: 0,
+        x: -50,
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: "power2.out",
+      },
+      "-=0.3"
+    );
+
+    // Subtext animation
+    tl.fromTo(
+      subtextRef.current,
+      {
+        opacity: 0,
+        y: 30,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "back.out(1.7)",
+      },
+      "-=0.5"
+    );
+
+    // Button animation
+    tl.fromTo(
+      buttonRef.current,
+      {
+        y: 50,
+        opacity: 0,
+        scale: 0.8,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+      },
+      "-=0.3"
+    );
+
+    // Scroll indicator animation
+    tl.fromTo(
+      scrollIndicatorRef.current,
+      {
+        opacity: 0,
+        y: 20,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      },
+      "-=0.2"
+    );
+
+    // Scroll indicator bounce animation
+    gsap.to(scrollIndicatorRef.current, {
+      y: -15,
+      duration: 1.5,
+      ease: "power1.inOut",
+      repeat: -1,
+      yoyo: true,
+      delay: 2,
+    });
+  }, []);
+
+  // Button hover effects
+  useEffect(() => {
+    const button = buttonRef.current;
+    const arrow = buttonArrowRef.current;
+    const hoverBg = buttonHoverRef.current;
+
+    if (!button) return;
+
+    const handleMouseEnter = () => {
+      gsap
+        .timeline()
+        .to(button, {
+          scale: 1.05,
+          duration: 0.3,
+          ease: "back.out(1.7)",
+        })
+        .to(
+          arrow,
+          {
+            rotation: 180,
+            duration: 0.3,
+          },
+          0
+        )
+        .to(
+          hoverBg,
+          {
+            scaleX: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          0
+        );
+    };
+
+    const handleMouseLeave = () => {
+      gsap
+        .timeline()
+        .to(button, {
+          scale: 1,
+          duration: 0.3,
+          ease: "back.out(1.7)",
+        })
+        .to(
+          arrow,
+          {
+            rotation: 0,
+            duration: 0.3,
+          },
+          0
+        )
+        .to(
+          hoverBg,
+          {
+            scaleX: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          0
+        );
+    };
+
+    const handleMouseDown = () => {
+      gsap.to(button, {
+        scale: 0.95,
+        duration: 0.1,
+        ease: "power2.in",
+      });
+    };
+
+    const handleMouseUp = () => {
+      gsap.to(button, {
+        scale: 1.05,
+        duration: 0.1,
+        ease: "power2.out",
+      });
+    };
+
+    button.addEventListener("mouseenter", handleMouseEnter);
+    button.addEventListener("mouseleave", handleMouseLeave);
+    button.addEventListener("mousedown", handleMouseDown);
+    button.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      button.removeEventListener("mouseenter", handleMouseEnter);
+      button.removeEventListener("mouseleave", handleMouseLeave);
+      button.removeEventListener("mousedown", handleMouseDown);
+      button.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  return (
+    <section
+      ref={containerRef}
+      className="relative flex flex-col justify-center min-h-[85vh] w-full px-2 text-midcolor overflow-hidden"
+      style={{ opacity: 0 }}
+    >
+      {/* Content Container */}
+      <div className="relative z-10 w-full max-w-7xl ">
+        {/* Tagline */}
+        <div
+          ref={taglineRef}
+          style={{
+            opacity: 0,
+            transform: "translateX(-50px)",
+          }}
+        >
+          <p className="text-lg md:text-xl text-midcolor/80 font-light tracking-wide uppercase">
+            Frontend Developer & UI Engineer
+          </p>
+        </div>
+
+        {/* Main Heading */}
+        <div className="flex flex-col gap-5 mb-10">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+            <AnimatedTitle />
+          </h1>
+
+          {/* Subheading */}
+          <div
+            ref={subtextRef}
+            className="max-w-2xl"
+            style={{
+              opacity: 0,
+              transform: "translateY(20px)",
+            }}
+          >
+            <p className="text-xl md:text-2xl text-midcolor/90 leading-relaxed font-light md:pt-6">
+              I create digital experiences that are fast, accessible, and
+              visually compelling. Specializing in React, TypeScript, and modern
+              web animation.
+            </p>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="flex flex-col sm:flex-row items-start gap-6">
+          <button
+            
+            className="group relative bg-transparent border-2 border-midcolor text-midcolor px-8 py-4 hover:bg-midcolor hover:text-background transition-all duration-600 overflow-hidden z-10  font-medium text-lg"
+          >
+            <span className="flex items-center gap-3 relative z-10">
+              View My Work
+              <span ref={buttonArrowRef}>→</span>
+            </span>
+          </button>
+
+          <button className="relative group text-midcolor hover:text-midcolor px-8 py-4 transition-all duration-300 font-medium text-lg border-2 border-solid">
+            <span className="flex items-center gap-2">
+              Download CV
+              <span className="group-hover:translate-y-0.5 transition-transform">
+                ↓
+              </span>
+            </span>
+            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-midcolor group-hover:w-full transition-all duration-500" />
+          </button>
+        </div>
+      </div>
+
+    </section>
+  );
+};
+
+export default Hero;

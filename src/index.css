@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import "tailwindcss";
+
+
+@theme {
+  --color-woodblack: #0E100F;
+  --color-cream: #FFFCE1;
+  --color-bermuda: #78dcca;
+  --font-inter: 'Inter', sans-serif;
+  --font-bebas-neue: 'Bebas Neue', sans-serif;
+  --color-primary: #00f050;
+  --color-secondary: #fff;
+  --color-third: #b5b5b5;
+  --color-midcolor: #000;
+  --color-background: #FFFFFF;
+  --color-secondary-background: #FFFFFF;
+  --color-solid: #303030;
+}
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  font-family: var(--font-inter);
+  user-select: none;
+}
+
+.anim-title span {
+  display: inline-block;
+  will-change: transform;
+}
+
+.char-span {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
