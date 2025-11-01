@@ -6,7 +6,7 @@ import tailwind from "../../assets/tailwind.webp";
 import motionIcon from "../../assets/framer-motion.webp";
 import node from "../../assets/node.webp";
 import express from "../../assets/express.webp";
-import mongodb from "../../assets/mongoDB.png";
+import mongodb from "../../assets/MongoDB.png";
 import sql from "../../assets/SQLDeveloper.png";
 import git from "../../assets/git.webp";
 import canva from "../../assets/canva.png";
