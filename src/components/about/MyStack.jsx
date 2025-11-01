@@ -9,8 +9,8 @@ import express from "../../assets/express.webp";
 import mongodb from "../../assets/MongoDB.png";
 import sql from "../../assets/SQLDeveloper.png";
 import git from "../../assets/git.webp";
-import canva from "../../assets/canva.png";
-import figma from "../../assets/figma.png";
+import canva from "../../assets/Canva.png";
+import figma from "../../assets/Figma.png";
 
 // Technology arrays (UNMODIFIED)
 const Frontend = [
