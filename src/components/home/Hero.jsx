@@ -1,55 +1,69 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
-  const imgRef = useRef(null);
   const [showImage, setShowImage] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
-  // 🖱️ Cursor-following image
   useEffect(() => {
-    const moveImage = (e) => {
-      if (!imgRef.current) return;
-      imgRef.current.style.transform = `translate(${e.clientX - 80}px, ${
-        e.clientY - 100
-      }px)`;
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-    if (showImage) window.addEventListener("mousemove", moveImage);
-    return () => window.removeEventListener("mousemove", moveImage);
-  }, [showImage]);
-
-  const handleResumeDownload = () => {
-    window.open("/docs/resume.pdf", "_blank");
-  };
+  useEffect(() => {
+    if (isMobile) return;
+    const handleMouseMove = (e) =>
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [isMobile]);
 
   const navigate = useNavigate();
-const handleProjectClick = () => navigate("/projects");
+  const handleProjectClick = () => navigate("/projects");
+  const handleResumeDownload = () => window.open("/docs/resume.pdf", "_blank");
 
+  const handleMouseEnter = () => {
+    if (!isMobile) setShowImage(true);
+  };
 
   return (
     <section className="relative flex items-center justify-center text-solid min-h-[85vh] md:min-h-[90vh] overflow-hidden">
       {/* Floating hover image */}
-      <motion.img
-        ref={imgRef}
-        src="/images/suraj.jpg"
-        alt="Suraj Savle"
-        className={`absolute top-0 left-0 w-30 h-24 object-cover rounded-full border border-gray-500 shadow-xl pointer-events-none z-50 transition-all ${
-          showImage ? "opacity-100 scale-100" : "opacity-0 scale-50"
-          }`}
-      />
+      <AnimatePresence>
+        {showImage && !isMobile && (
+          <motion.img
+            src="/images/suraj.jpg"
+            alt="Suraj preview"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed w-32 h-32 object-cover cursor-none rounded-full border-2 border-white shadow-2xl pointer-events-none z-40"
+            style={{
+              left: mousePosition.x + 10,
+              top: mousePosition.y + 20,
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, x: -60 }}
+        whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
         className="flex flex-col items-start md:text-left max-w-6xl"
       >
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
+          viewport={{ once: true }}
           className="text-lg md:text-xl text-midcolor/80 tracking-wide uppercase mb-4"
         >
           Full Stack Web Developer
@@ -57,17 +71,20 @@ const handleProjectClick = () => navigate("/projects");
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 select-none"
+          viewport={{ once: true }}
+          className="relative text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 select-none"
         >
           <h1>
             I ' M{" "}
             <motion.span
               className="text-solid inline-block cursor-none"
-              onMouseEnter={() => setShowImage(true)}
+              onMouseEnter={handleMouseEnter}
               onMouseLeave={() => setShowImage(false)}
-              
+              onTouchStart={handleMouseEnter}
+              onTouchEnd={() => setShowImage(false)}
+              transition={{ type: "spring", stiffness: 250 }}
             >
               SURAJ SAVLE
             </motion.span>
@@ -75,9 +92,10 @@ const handleProjectClick = () => navigate("/projects");
         </motion.div>
 
         <motion.p
+          whileInView={{ opacity: 1, y: 0 }}
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
+          viewport={{ once: true }}
           className="text-xl md:text-2xl text-midcolor/90 leading-relaxed font-light mb-8 hover:text-solid transition-all duration-500"
         >
           I create digital experiences that are fast, accessible, and visually
@@ -86,14 +104,19 @@ const handleProjectClick = () => navigate("/projects");
         </motion.p>
 
         <motion.div
-          className="flex flex-col w-full sm:flex-row items-start gap-4"
           initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.7 }}
+          viewport={{ once: true }}
+          className="flex flex-col w-full sm:flex-row items-start gap-4"
         >
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true }}
             className="group relative w-full flex items-center justify-center border-2 border-midcolor text-midcolor px-8 py-4 hover:bg-midcolor hover:text-background transition-all duration-500 font-medium text-lg"
             onClick={handleProjectClick}
           >
@@ -109,6 +132,10 @@ const handleProjectClick = () => navigate("/projects");
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true }}
             className="relative group w-full flex items-center justify-center border-2 border-midcolor text-midcolor px-8 py-4 transition-all duration-500 font-medium text-lg"
             onClick={handleResumeDownload}
           >

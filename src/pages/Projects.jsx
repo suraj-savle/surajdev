@@ -11,6 +11,7 @@ import {
   ArrowLeftIcon,
   Layers, // Added for visual interest
 } from "lucide-react";
+import Footer from "../components/footer/Footer";
 
 // Assuming projectsData is the same as provided
 const projectsData = {
@@ -110,7 +111,7 @@ function Projects() {
   return (
     <section
       id="projects"
-      className="py-10 sm:py-15 px-1 sm:px-6 lg:px-8 bg-background relative"
+      className="py-10 sm:py-10 px-1 sm:px-6 lg:px-8 bg-background relative"
     >
       {/* Background/Pattern for depth (Assuming Tailwind/CSS vars for colors) */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
@@ -125,7 +126,7 @@ function Projects() {
             className="group flex items-center gap-2 text-midcolor hover:text-solid transition-all duration-300 py-2 rounded-xl"
           >
             <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
-            <span className="font-medium">Go Back</span>
+            <span className="font-medium">Back</span>
           </button>
         </div>
 
@@ -373,6 +374,7 @@ function Projects() {
           )}
         </AnimatePresence>
       </div>
+      <Footer />
     </section>
   );
 }

@@ -18,25 +18,21 @@ const Frontend = [
     image: javascript,
     title: "Javascript",
     category: "frontend",
-    color: "from-yellow-400 to-yellow-600",
   },
   {
     image: react,
     title: "React",
     category: "frontend",
-    color: "from-cyan-400 to-blue-600",
   },
   {
     image: tailwind,
     title: "Tailwind CSS",
     category: "frontend",
-    color: "from-teal-400 to-cyan-600",
   },
   {
     image: motionIcon,
     title: "Framer Motion",
     category: "frontend",
-    color: "from-purple-400 to-pink-600",
   },
 ];
 
@@ -45,13 +41,11 @@ const Backend = [
     image: node,
     title: "Node.Js",
     category: "backend",
-    color: "from-green-400 to-green-600",
   },
   {
     image: express,
     title: "Express.Js",
     category: "backend",
-    color: "from-gray-400 to-gray-600",
   },
 ];
 
@@ -60,13 +54,11 @@ const Database = [
     image: mongodb,
     title: "MongoDB",
     category: "database",
-    color: "from-green-400 to-emerald-600",
   },
   {
     image: sql,
     title: "SQL",
     category: "database",
-    color: "from-red-400 to-red-600",
   },
 ];
 
@@ -75,24 +67,19 @@ const Tools = [
     image: git,
     title: "Git",
     category: "tools",
-    color: "from-orange-400 to-orange-600",
   },
   {
     image: canva,
     title: "Canva",
     category: "tools",
-    color: "from-blue-400 to-purple-600",
   },
   {
     image: figma,
     title: "Figma",
     category: "tools",
-    color: "from-purple-400 to-pink-600",
   },
 ];
 
-// Combine all technologies for marquee
-const allTechnologies = [...Frontend, ...Backend, ...Database, ...Tools];
 
 // Animation variants - REFINING EASE AND DURATION
 const container = {
@@ -173,7 +160,7 @@ const MarqueeRow = ({ technologies, direction = "left", speed = 100 }) => {
 
       <motion.div
         ref={marqueeRef}
-        className="flex gap-6"
+        className="flex items-center w-full gap-6"
         style={{ willChange: "transform" }}
       >
         {duplicatedTech.map((tech, index) => (
@@ -184,18 +171,18 @@ const MarqueeRow = ({ technologies, direction = "left", speed = 100 }) => {
               y: -5,
               transition: { duration: 0.3 },
             }}
-            className="flex items-center gap-4 px-6 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl min-w-[180px] transition-all duration-300"
+            className="flex items-center justify-center px-9 py-2 w-full gap-5 rounded-2xl transition-all duration-300"
           >
             <motion.img
               src={tech.image}
               alt={tech.title}
-              className="w-8 h-8 rounded-lg"
+              className="w-10 h-10 rounded-lg"
               whileHover={{
                 rotate: [0, -5, 5, 0],
                 transition: { duration: 0.6 },
               }}
             />
-            <span className="text-solid font-medium text-lg whitespace-nowrap">
+            <span className="text-solid font-medium text-xl whitespace-nowrap">
               {tech.title}
             </span>
           </motion.div>

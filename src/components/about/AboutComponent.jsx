@@ -16,10 +16,9 @@ import MusicPlayer from "../ui/MusicPlayer";
 // Reusable Motion wrapper for fade-up animation (Kept as is)
 const FadeUp = ({ children, delay = 0, className = "" }) => (
   <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay }}
-    viewport={{ once: true }}
+    initial={{ opacity: 0, y: 60 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1, ease: "easeOut" }}
     className={className}
   >
     {children}
@@ -31,7 +30,7 @@ const CardMotion = ({ children, className = "", delay = 0 }) => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
+    transition={{ type: "spring", stiffness: 250, damping: 15 }}
     viewport={{ once: true }}
     
     // Add simple interactive animation

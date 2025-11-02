@@ -4,8 +4,6 @@ import {
   Mail,
   Github,
   Linkedin,
-  Twitter,
-  MessageCircle,
   Copy,
   Check,
   ExternalLink,
@@ -14,10 +12,28 @@ import {
 const ContactComponent = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText("iamsurajsavle@gmail.com");
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
+  const copyEmail = async () => {
+    try {
+      const email = "iamsurajsavle@gmail.com";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = email;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch (error) {
+      console.error("Copy failed:", error);
+      alert("Clipboard not supported. Try manually copying!");
+    }
   };
 
   const socialLinks = [
@@ -36,33 +52,30 @@ const ContactComponent = () => {
   ];
 
   return (
-    <section className="min-h-fit flex items-start justify-center py-8 ">
+    <section className="min-h-fit flex items-start justify-center py-5">
       <div className="max-w-6xl w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
           className="flex flex-col items-start mb-10"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-solid text-4xl md:text-6xl font-black uppercase mb-10"
-          >
-            <h1>contact</h1>
-          </motion.div>
+          <h1 className="text-solid text-4xl md:text-6xl font-black uppercase mb-10">
+            CONTACT
+          </h1>
         </motion.div>
 
         {/* Main Content Grid */}
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Email Copy Component */}
+          {/* Email Copy Section */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="border rounded-2xl p-6 text-center"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="border rounded-2xl p-6 text-center bg-white/80 backdrop-blur-md"
           >
             <Mail className="w-12 h-12 text-solid mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-solid mb-3">Email Me</h3>
@@ -83,18 +96,19 @@ const ContactComponent = () => {
               ) : (
                 <>
                   <Copy className="w-5 h-5" />
-                  <span className="text-lg">iamsurajsalve@gmail.com</span>
+                  <span className="text-lg">iamsurajsavle@gmail.com</span>
                 </>
               )}
             </motion.button>
           </motion.div>
 
-          {/* Connect With Me Component */}
+          {/* Socials Section */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="border rounded-2xl p-6"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="border rounded-2xl p-6 bg-white/80 backdrop-blur-md"
           >
             <h3 className="text-xl font-semibold text-solid mb-6 text-center">
               Connect With Me
@@ -108,8 +122,9 @@ const ContactComponent = () => {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileTap={{ scale: 0.98 }}
-                    className={`flex items-center justify-between p-4  border-b text-midcolor transition-all duration-300 group`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="flex items-center justify-between p-4 border-b text-midcolor transition-all duration-300 group"
                   >
                     <div className="flex items-center gap-4">
                       <IconComponent className="w-5 h-5" />
@@ -132,23 +147,22 @@ const ContactComponent = () => {
 
         {/* Footer */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
           className="text-center mt-12"
         >
-          <div className="text-center mt-12 sm:mt-16">
-            <p className="text-gray-600 text-sm sm:text-base">
-              Prefer a quick chat?{" "}
-              <a
-                href="mailto:suraj@savle.com"
-                className="text-solid font-medium underline underline-offset-2"
-              >
-                Send me an email
-              </a>{" "}
-              and I'll respond within hours.
-            </p>
-          </div>
+          <p className="text-gray-600 text-sm sm:text-base">
+            Prefer a quick chat?{" "}
+            <a
+              href="mailto:suraj@savle.com"
+              className="text-solid font-medium underline underline-offset-2"
+            >
+              Send me an email
+            </a>{" "}
+            and I'll respond within hours.
+          </p>
         </motion.div>
       </div>
     </section>

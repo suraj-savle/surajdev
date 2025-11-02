@@ -9,8 +9,8 @@ const Contact = () => {
   };
 
   return (
-    <div className="py-5 max-w-7xl relative z-10">
-      <div className="mb-8 sm:mb-12">
+    <div className="py-5 max-w-6xl mx-auto relative z-10">
+      <div className="mb-8 sm:mb-5">
         <button
           onClick={handleBackClick}
           className="group flex items-center gap-2 text-solid hover:text-midcolor transition-all duration-300  py-2 rounded-xl  backdrop-blur-sm border border-transparent hover:underline"
