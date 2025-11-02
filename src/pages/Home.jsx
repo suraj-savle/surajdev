@@ -1,7 +1,7 @@
 import React from "react";
 import Hero from "../components/home/Hero";
 import Navbar from "../components/Navigation/Navbar";
-
+import { motion } from "framer-motion";
 import { FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
 import ContactComponent from "../components/contact/ContactComponent";
 import Services from "../components/services/Services";
@@ -14,7 +14,12 @@ import MyStack from "../components/about/MyStack";
 function Home() {
   return (
     <div className=" overflow-hidden">
-      <div className="hidden lg:block fixed top-[70%] left-[-6rem] rotate-90 z-20">
+      <motion.div
+        initial={{ opacity: 0, y: 80 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="hidden lg:block fixed top-[70%] left-[-6rem] rotate-90 z-20"
+      >
         <a
           href="https://mail.google.com/mail/?view=cm&fs=1&to=iamsurajsavle@gmail.com"
           target="_blank"
@@ -23,7 +28,7 @@ function Home() {
         >
           iamsurajsavle@gmail.com
         </a>
-      </div>
+      </motion.div>
       <Navbar />
       <Hero />
       <AboutComponent />
@@ -33,10 +38,20 @@ function Home() {
       <ContactComponent />
       <Footer />
       <ScrollToTop />
-      <div className="hidden lg:block fixed right-6 bottom-0 transform -translate-y-1/2 z-20">
+      <motion.div
+        initial={{ opacity: 0, x: 80 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1 }}
+        className="hidden lg:block fixed right-6 bottom-0 transform -translate-y-1/2 z-20"
+      >
         <ul className="flex flex-col gap-4 text-2xl text-solid">
           <li>
-            <a href="#" className="hover:text-midcolor transition-colors">
+            <a
+              href="https://www.instagram.com/codebys"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-midcolor transition-colors"
+            >
               <FaInstagram />
             </a>
           </li>
@@ -61,7 +76,7 @@ function Home() {
             </a>
           </li>
         </ul>
-      </div>
+      </motion.div>
     </div>
   );
 }
