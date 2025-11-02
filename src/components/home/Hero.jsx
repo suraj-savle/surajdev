@@ -23,8 +23,8 @@ const Hero = () => {
     window.open("/docs/resume.pdf", "_blank");
   };
 
-  const handleContactClick = () => {
-    window.open("projects", "_self");
+  const handleprojectClick = () => {
+    window.open("/projects", "_self");
   };
 
   return (
@@ -94,7 +94,7 @@ const Hero = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="group relative w-full flex items-center justify-center border-2 border-midcolor text-midcolor px-8 py-4 hover:bg-midcolor hover:text-background transition-all duration-500 font-medium text-lg"
-            onClick={handleContactClick}
+            onClick={handleprojectClick}
           >
             <span className="flex items-center gap-3">
               View My Work
