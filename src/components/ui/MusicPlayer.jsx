@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Loader2 } from "lucide-react";
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef(null);
 
   const tracks = [
@@ -27,43 +28,55 @@ const MusicPlayer = () => {
     },
   ];
 
-  // Stop playback when a song ends (no auto-next)
+  // Handle audio loading + ended
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    setIsLoading(true);
+    const handleCanPlay = () => setIsLoading(false);
     const handleEnded = () => setIsPlaying(false);
 
+    audio.addEventListener("canplaythrough", handleCanPlay);
     audio.addEventListener("ended", handleEnded);
-    return () => audio.removeEventListener("ended", handleEnded);
-  }, []);
+
+    // Load new track manually
+    audio.load();
+
+    return () => {
+      audio.removeEventListener("canplaythrough", handleCanPlay);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [currentTrack]);
 
   // Handle play/pause
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (isPlaying) {
-      audio.play().catch((err) => {
-        console.error("Playback error:", err);
-        setIsPlaying(false);
-      });
+    if (isPlaying && !isLoading) {
+      audio
+        .play()
+        .catch((err) => {
+          console.error("Playback error:", err);
+          setIsPlaying(false);
+        });
     } else {
       audio.pause();
     }
-  }, [isPlaying, currentTrack]);
+  }, [isPlaying, isLoading, currentTrack]);
 
   const handlePlayPause = () => {
-    setIsPlaying((prev) => !prev);
+    if (!isLoading) setIsPlaying((prev) => !prev);
   };
 
   const handleNext = () => {
-    setIsPlaying(false); // stop auto-playing next
+    setIsPlaying(false);
     setCurrentTrack((prev) => (prev + 1) % tracks.length);
   };
 
   const handlePrevious = () => {
-    setIsPlaying(false); // stop auto-playing previous
+    setIsPlaying(false);
     setCurrentTrack((prev) => (prev - 1 + tracks.length) % tracks.length);
   };
 
@@ -71,15 +84,19 @@ const MusicPlayer = () => {
     <div className="flex flex-col items-center w-full h-full justify-around rounded-2xl border border-midcolor hover:shadow-2xl transition-all duration-500 p-6 overflow-hidden">
       <audio ref={audioRef} src={tracks[currentTrack].src} preload="metadata" />
 
-      {/* Album cover */}
+      {/* Album Cover or Loading Spinner */}
       <div className="relative w-62 h-62 flex items-center justify-center mb-4">
-        <img
-          src={tracks[currentTrack].cover}
-          alt={tracks[currentTrack].title}
-          className={`w-full h-full object-cover rounded-full border-4 border-solid transition-all duration-700 ${
-            isPlaying ? "animate-spin-slow" : ""
-          }`}
-        />
+        {isLoading ? (
+          <Loader2 className="animate-spin text-midcolor w-16 h-16" />
+        ) : (
+          <img
+            src={tracks[currentTrack].cover}
+            alt={tracks[currentTrack].title}
+            className={`w-full h-full object-cover rounded-full border-4 border-solid transition-all duration-700 ${
+              isPlaying ? "animate-spin-slow" : ""
+            }`}
+          />
+        )}
       </div>
 
       <div className="text-2xl font-bold mb-6 text-solid">
@@ -90,21 +107,30 @@ const MusicPlayer = () => {
       <div className="flex items-center justify-between gap-8">
         <button
           onClick={handlePrevious}
-          className="p-3 text-solid hover:text-midcolor transition-transform duration-200 hover:scale-110"
+          disabled={isLoading}
+          className="p-3 text-solid hover:text-midcolor transition-transform duration-200 hover:scale-110 disabled:opacity-40"
         >
           <SkipBack size={26} />
         </button>
 
         <button
           onClick={handlePlayPause}
-          className="bg-solid text-white p-4 rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+          disabled={isLoading}
+          className="bg-solid text-white p-4 rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
         >
-          {isPlaying ? <Pause size={26} /> : <Play size={26} />}
+          {isLoading ? (
+            <Loader2 size={26} className="animate-spin" />
+          ) : isPlaying ? (
+            <Pause size={26} />
+          ) : (
+            <Play size={26} />
+          )}
         </button>
 
         <button
           onClick={handleNext}
-          className="p-3 text-solid hover:text-midcolor transition-transform duration-200 hover:scale-110"
+          disabled={isLoading}
+          className="p-3 text-solid hover:text-midcolor transition-transform duration-200 hover:scale-110 disabled:opacity-40"
         >
           <SkipForward size={26} />
         </button>
